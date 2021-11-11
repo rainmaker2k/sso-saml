@@ -1,0 +1,11 @@
+node_modules
+package-lock.json
+yarn.lock
+.DS_STORE
+dist
+
+.vscode
+.env
+
+*.d.ts
+*.d.ts.map
