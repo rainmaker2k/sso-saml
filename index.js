@@ -30,7 +30,6 @@ passport.use(new saml(
     entryPoint: process.env.SSO_ENTRYPOINT,
     issuer: process.env.SSO_ISSUER,
     cert: process.env.SSO_CERT,
-    //privateKey: fs.readFileSync(__dirname + '/keys/privkey.pem'),
     protocol: "http://",
     logoutUrl: process.env.SSO_SIGNOUT_URL,
   },
