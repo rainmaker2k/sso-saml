@@ -16,10 +16,11 @@ app.use(session({ secret: process.env.SESSION_SECRET }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-const findByEmail = function (email, callback) {
+const findByEmail = function (email, profile, callback) {
   return callback(null, {
-    user_id: '21b06b08-f296-42f4-81aa-73fb5a8eac67',
-    email: email
+    user_id: profile.ad_guid,
+    email: profile.email,
+	name: profile.name
   });
 }
 
@@ -35,7 +36,7 @@ passport.use(new saml(
   },
   function(profile, done) {
     userProfile = profile;
-    findByEmail(profile.email, function(err, user) {
+    findByEmail(profile.email, profile, function(err, user) {
       if (err) {
         return done(err);
       }
@@ -53,7 +54,7 @@ passport.deserializeUser((user, done) => {
 });
 
 const redirectToLogin = (req, res, next) => {
-	if (!req.isAuthenticated() || userProfile == null) {
+	if (!req.isAuthenticated() || req.user == null) {
 		return res.redirect('/login');
 	}
 	next();
@@ -61,7 +62,7 @@ const redirectToLogin = (req, res, next) => {
 
 
 app.get('/', redirectToLogin, (req, res) => {
-	res.send(`Logged In<br/>Welcome ${userProfile.email}`);
+	res.send(`Logged In<br/>Welcome ${req.user.email}<br/>${JSON.stringify(req.user)}`);
 });
 
 app.get(
